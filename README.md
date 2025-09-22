@@ -1,3 +1,6 @@
+<img width="851" height="315" alt="image" src="https://github.com/user-attachments/assets/39ed0466-a98b-4177-b61a-250a6a2518f8" />
+
+
 # LINA - Line Analysis Assistant
 
 A sports betting analysis tool that leverages LLM technology to analyze sports lines and provide intelligent betting recommendations. LINA aggregates sports data from third-party APIs, stores it in a database, and uses AI analysis to identify profitable betting opportunities including straight bets and parlays.
