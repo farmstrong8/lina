@@ -131,10 +131,6 @@ OLLAMA_MODEL=llama3.1:8b
 # Server Configuration
 API_PORT=3001
 WEB_PORT=3000
-
-# Development
-NODE_ENV=development
-LOG_LEVEL=info
 ```
 
 ### Configuration Files
