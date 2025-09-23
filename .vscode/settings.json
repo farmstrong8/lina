@@ -1,6 +1,8 @@
 {
     "kiroAgent.configureMCP": "Enabled",
+    "editor.insertSpaces": false,
     "editor.tabSize": 4,
+    "editor.detectIndentation": false,
     "editor.codeActionsOnSave": {
         "source.organizeImports.biome": "explicit"
     }

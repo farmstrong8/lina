@@ -12,5 +12,23 @@
     "dependencies": {},
     "devDependencies": {
         "typescript": "^5.5.4"
+    },
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+        },
+        "./api": {
+            "types": "./dist/api.d.ts",
+            "default": "./dist/api.js"
+        },
+        "./database": {
+            "types": "./dist/database.d.ts",
+            "default": "./dist/database.js"
+        },
+        "./analysis": {
+            "types": "./dist/analysis.d.ts",
+            "default": "./dist/analysis.js"
+        }
     }
 }

@@ -1,0 +1,23 @@
+{
+    "name": "@lina/odds-aggregator",
+    "version": "1.0.0",
+    "description": "Task-based aggregator for FanDuel odds from OddsApi",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsx watch src/index.ts",
+        "start": "tsx src/index.ts",
+        "clean": "rm -rf dist"
+    },
+    "dependencies": {
+        "@lina/types": "*",
+        "@lina/database": "*",
+        "@lina/odds-api": "*",
+        "dotenv": "^16.4.5"
+    },
+    "devDependencies": {
+        "typescript": "^5.5.4",
+        "@types/node": "^20.14.15",
+        "tsx": "^4.16.5"
+    }
+}

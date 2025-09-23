@@ -3,14 +3,16 @@
     "version": "1.0.0",
     "description": "LINA (Line Analysis Assistant) - Sports betting analysis tool with AI recommendations",
     "private": true,
-    "workspaces": ["packages/*", "apps/*"],
+    "workspaces": [
+        "packages/*",
+        "apps/*"
+    ],
     "scripts": {
-        "build": "npm run build --workspaces",
         "dev": "npm run dev --workspaces",
         "lint": "biome check .",
         "lint:fix": "biome check --write .",
         "format": "biome format --write .",
-        "typecheck": "tsc --noEmit",
+        "typecheck": "tsc",
         "clean": "rm -rf node_modules packages/*/node_modules apps/*/node_modules packages/*/dist apps/*/dist",
         "db:generate": "drizzle-kit generate",
         "db:migrate": "npx tsx db/migrate.ts",
@@ -19,13 +21,16 @@
         "db:pull": "drizzle-kit pull",
         "db:check": "drizzle-kit check",
         "db:up": "drizzle-kit up",
+        "aggregator:odds": "tsx tasks/odds-aggregator/src/index.ts",
+        "aggregator:football": "tsx tasks/football-aggregator/src/index.ts",
         "api:start": "npm run start --workspace=@lina/api-server",
         "web:start": "npm run start --workspace=@lina/web",
         "web:dev": "npm run dev --workspace=@lina/web"
     },
     "dependencies": {
         "drizzle-kit": "^0.24.0",
-        "tsx": "^4.16.5"
+        "tsx": "^4.16.5",
+        "dotenv": "^16.4.5"
     },
     "devDependencies": {
         "@biomejs/biome": "^1.8.3",

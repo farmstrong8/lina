@@ -1,5 +1,7 @@
 # Kiro IDE
 .kiro
+.zed
+.serena
 
 # Dependencies
 node_modules/
