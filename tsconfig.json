@@ -1,0 +1,17 @@
+{
+    "extends": "@tsconfig/node20/tsconfig.json",
+    "compilerOptions": {
+        "incremental": false,
+        "baseUrl": ".",
+        "paths": {
+            "@lina/types": ["./packages/types/src"],
+            "@lina/constants": ["./packages/constants/src"],
+            "@lina/config": ["./packages/config/src"],
+            "@lina/database": ["./packages/database/src"],
+            "@lina/aggregators": ["./packages/aggregators/src"],
+            "@lina/ai-engine": ["./packages/ai-engine/src"],
+            "@lina/validation": ["./packages/validation/src"]
+        }
+    },
+    "include": ["packages", "db"]
+}

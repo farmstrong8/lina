@@ -1,0 +1,18 @@
+{
+    "name": "@lina/config",
+    "version": "1.0.0",
+    "description": "Configuration management system for LINA",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "clean": "rm -rf dist"
+    },
+    "dependencies": {
+        "@lina/types": "*"
+    },
+    "devDependencies": {
+        "typescript": "^5.5.4"
+    }
+}

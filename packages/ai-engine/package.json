@@ -1,0 +1,22 @@
+{
+    "name": "@lina/ai-engine",
+    "version": "1.0.0",
+    "description": "AI analysis and recommendation engine for LINA",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "clean": "rm -rf dist"
+    },
+    "dependencies": {
+        "@lina/types": "*",
+        "@lina/config": "*",
+        "@lina/database": "*",
+        "ai": "^3.3.4",
+        "ollama-ai-provider": "^0.15.0"
+    },
+    "devDependencies": {
+        "typescript": "^5.5.4"
+    }
+}

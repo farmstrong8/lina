@@ -1,0 +1,75 @@
+{
+    "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+    "organizeImports": {
+        "enabled": true
+    },
+    "linter": {
+        "enabled": true,
+        "rules": {
+            "recommended": true,
+            "complexity": {
+                "noExcessiveCognitiveComplexity": "error",
+                "noVoid": "off"
+            },
+            "style": {
+                "noNonNullAssertion": "warn",
+                "useImportType": "error",
+                "useNodejsImportProtocol": "error"
+            },
+            "suspicious": {
+                "noExplicitAny": "warn",
+                "noArrayIndexKey": "warn"
+            },
+            "correctness": {
+                "noUnusedVariables": "error",
+                "useExhaustiveDependencies": "warn"
+            }
+        }
+    },
+    "formatter": {
+        "enabled": true,
+        "formatWithErrors": false,
+        "indentStyle": "space",
+        "indentWidth": 4,
+        "lineWidth": 100,
+        "lineEnding": "lf"
+    },
+    "javascript": {
+        "formatter": {
+            "quoteStyle": "single",
+            "trailingCommas": "es5",
+            "semicolons": "always",
+            "arrowParentheses": "asNeeded"
+        }
+    },
+    "json": {
+        "formatter": {
+            "trailingCommas": "none"
+        }
+    },
+    "files": {
+        "include": [
+            "packages/**/*.ts",
+            "packages/**/*.tsx",
+            "apps/**/*.ts",
+            "apps/**/*.tsx",
+            "db/**/*.ts",
+            "*.ts",
+            "*.tsx",
+            "*.js",
+            "*.jsx",
+            "*.json"
+        ],
+        "ignore": [
+            "node_modules",
+            "dist",
+            "build",
+            ".next",
+            "coverage",
+            "db/*.db",
+            "db/backups/*",
+            "db/migrations/*",
+            "*.tsbuildinfo"
+        ]
+    }
+}
