@@ -3,10 +3,7 @@
     "version": "1.0.0",
     "description": "LINA (Line Analysis Assistant) - Sports betting analysis tool with AI recommendations",
     "private": true,
-    "workspaces": [
-        "packages/*",
-        "apps/*"
-    ],
+    "workspaces": ["packages/*", "apps/*"],
     "scripts": {
         "dev": "npm run dev --workspaces",
         "lint": "biome check .",
@@ -21,7 +18,7 @@
         "db:pull": "drizzle-kit pull",
         "db:check": "drizzle-kit check",
         "db:up": "drizzle-kit up",
-        "aggregator:odds": "tsx tasks/odds-aggregator/src/index.ts",
+        "aggregator:football-odds": "tsx tasks/football-odds-aggregator/src/index.ts",
         "aggregator:football": "tsx tasks/football-aggregator/src/index.ts",
         "api:start": "npm run start --workspace=@lina/api-server",
         "web:start": "npm run start --workspace=@lina/web",

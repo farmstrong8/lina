@@ -1,8 +1,17 @@
 import { HTTP_STATUS, ODDS_API } from '@lina/types';
+import type {
+    EventsParams,
+    EventsResponse,
+    OddsParams,
+    OddsResponse,
+    SportsParams,
+    SportsResponse,
+} from './types';
+import { DEFAULT_ODDS_PARAMS, FANDUEL_BOOKMAKER_KEY, NFL_SPORT_KEY } from './types';
 
 /**
  * Singleton client for The Odds API
- * Focused on FanDuel odds for NFL games
+ * Sport-agnostic client with convenience methods for common use cases
  */
 export class OddsApiClient {
     private static instance: OddsApiClient;
@@ -44,21 +53,88 @@ export class OddsApiClient {
     }
 
     /**
-     * Get FanDuel odds for NFL games
-     * This method will be implemented once we have the API response types
+     * Make authenticated request to the API
      */
-    public async getFanDuelOdds(params: any): Promise<any> {
-        // Implementation will be added when API types are provided
-        throw new Error('Method not implemented yet - waiting for API types');
+    private async makeRequest<T>(
+        endpoint: string,
+        params: Record<string, string> = {}
+    ): Promise<T> {
+        await this.enforceRateLimit();
+
+        const url = new URL(endpoint, this.baseUrl);
+        // Add API key to params
+        const allParams = { ...params, apiKey: this.apiKey };
+
+        for (const [key, value] of Object.entries(allParams)) {
+            if (value !== undefined && value !== null) {
+                url.searchParams.append(key, value);
+            }
+        }
+
+        const response = await fetch(url.toString(), {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+        }
+
+        return response.json() as T;
     }
 
     /**
-     * Get upcoming NFL games with odds
-     * This method will be implemented once we have the API response types
+     * Get available sports (does not count against quota)
      */
-    public async getUpcomingGames(): Promise<any> {
-        // Implementation will be added when API types are provided
-        throw new Error('Method not implemented yet - waiting for API types');
+    public async getSports(params: Omit<SportsParams, 'apiKey'> = {}): Promise<SportsResponse> {
+        const queryParams: Record<string, string> = {};
+
+        if (params.all !== undefined) {
+            queryParams.all = params.all.toString();
+        }
+
+        return this.makeRequest<SportsResponse>('/v4/sports', queryParams);
+    }
+
+    /**
+     * Get events for a specific sport (does not count against quota)
+     */
+    public async getEvents(params: Omit<EventsParams, 'apiKey'>): Promise<EventsResponse> {
+        const { sport, ...restParams } = params;
+        const queryParams: Record<string, string> = {};
+
+        if (restParams.dateFormat) queryParams.dateFormat = restParams.dateFormat;
+        if (restParams.eventIds) queryParams.eventIds = restParams.eventIds;
+        if (restParams.commenceTimeFrom) queryParams.commenceTimeFrom = restParams.commenceTimeFrom;
+        if (restParams.commenceTimeTo) queryParams.commenceTimeTo = restParams.commenceTimeTo;
+
+        return this.makeRequest<EventsResponse>(`/v4/sports/${sport}/events`, queryParams);
+    }
+
+    /**
+     * Get odds for a specific sport (counts against quota)
+     */
+    public async getOdds(params: Omit<OddsParams, 'apiKey'>): Promise<OddsResponse> {
+        const { sport, regions, ...restParams } = params;
+        const queryParams: Record<string, string> = {
+            regions,
+        };
+
+        if (restParams.markets) queryParams.markets = restParams.markets;
+        if (restParams.dateFormat) queryParams.dateFormat = restParams.dateFormat;
+        if (restParams.oddsFormat) queryParams.oddsFormat = restParams.oddsFormat;
+        if (restParams.eventIds) queryParams.eventIds = restParams.eventIds;
+        if (restParams.bookmakers) queryParams.bookmakers = restParams.bookmakers;
+        if (restParams.commenceTimeFrom) queryParams.commenceTimeFrom = restParams.commenceTimeFrom;
+        if (restParams.commenceTimeTo) queryParams.commenceTimeTo = restParams.commenceTimeTo;
+        if (restParams.includeLinks) queryParams.includeLinks = restParams.includeLinks.toString();
+        if (restParams.includeSids) queryParams.includeSids = restParams.includeSids.toString();
+        if (restParams.includeBetLimits)
+            queryParams.includeBetLimits = restParams.includeBetLimits.toString();
+
+        return this.makeRequest<OddsResponse>(`/v4/sports/${sport}/odds`, queryParams);
     }
 
     /**

@@ -1,4 +1,14 @@
 import { FOOTBALL_API, HTTP_STATUS } from '@lina/types';
+import type {
+    GamesParams,
+    GamesResponse,
+    InjuriesParams,
+    InjuriesResponse,
+    PlayersParams,
+    PlayersResponse,
+    StatisticsParams,
+    StatisticsResponse,
+} from './types';
 
 /**
  * Singleton client for API-American-Football
@@ -44,30 +54,93 @@ export class FootballApiClient {
     }
 
     /**
-     * Get team statistics
-     * This method will be implemented once we have the API response types
+     * Make authenticated request to the API
      */
-    public async getTeamStats(params: any): Promise<any> {
-        // Implementation will be added when API types are provided
-        throw new Error('Method not implemented yet - waiting for API types');
+    private async makeRequest<T>(
+        endpoint: string,
+        params: Record<string, string> = {}
+    ): Promise<T> {
+        await this.enforceRateLimit();
+
+        const url = new URL(endpoint, this.baseUrl);
+        for (const [key, value] of Object.entries(params)) {
+            if (value) url.searchParams.append(key, value);
+        }
+
+        const response = await fetch(url.toString(), {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': this.apiKey,
+                'X-RapidAPI-Host': FOOTBALL_API.HEADERS.HOST,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+        }
+
+        return response.json() as T;
     }
 
     /**
-     * Get player injury reports for a team
-     * This method will be implemented once we have the API response types
+     * Get games for a specific league/season/week
      */
-    public async getPlayerInjuries(params: any): Promise<any> {
-        // Implementation will be added when API types are provided
-        throw new Error('Method not implemented yet - waiting for API types');
+    public async getGames(params: GamesParams = {}): Promise<GamesResponse> {
+        const queryParams: Record<string, string> = {};
+
+        if (params.league) queryParams.league = params.league;
+        if (params.season) queryParams.season = params.season;
+        if (params.date) queryParams.date = params.date;
+        if (params.week) queryParams.week = params.week;
+        if (params.team) queryParams.team = params.team;
+        if (params.timezone) queryParams.timezone = params.timezone;
+
+        return this.makeRequest<GamesResponse>('/games', queryParams);
     }
 
     /**
-     * Get game schedule for a specific week
-     * This method will be implemented once we have the API response types
+     * Get players for a specific team/season
      */
-    public async getGameSchedule(params: any): Promise<any> {
-        // Implementation will be added when API types are provided
-        throw new Error('Method not implemented yet - waiting for API types');
+    public async getPlayers(params: PlayersParams = {}): Promise<PlayersResponse> {
+        const queryParams: Record<string, string> = {};
+
+        if (params.team) queryParams.team = params.team;
+        if (params.season) queryParams.season = params.season;
+        if (params.search) queryParams.search = params.search;
+        if (params.page) queryParams.page = params.page;
+
+        return this.makeRequest<PlayersResponse>('/players', queryParams);
+    }
+
+    /**
+     * Get player statistics
+     */
+    public async getPlayerStatistics(params: StatisticsParams = {}): Promise<StatisticsResponse> {
+        const queryParams: Record<string, string> = {};
+
+        if (params.league) queryParams.league = params.league;
+        if (params.season) queryParams.season = params.season;
+        if (params.team) queryParams.team = params.team;
+        if (params.player) queryParams.player = params.player;
+        if (params.game) queryParams.game = params.game;
+
+        return this.makeRequest<StatisticsResponse>('/players/statistics', queryParams);
+    }
+
+    /**
+     * Get player injury reports
+     */
+    public async getInjuries(params: InjuriesParams = {}): Promise<InjuriesResponse> {
+        const queryParams: Record<string, string> = {};
+
+        if (params.league) queryParams.league = params.league;
+        if (params.season) queryParams.season = params.season;
+        if (params.team) queryParams.team = params.team;
+        if (params.player) queryParams.player = params.player;
+        if (params.date) queryParams.date = params.date;
+        if (params.timezone) queryParams.timezone = params.timezone;
+
+        return this.makeRequest<InjuriesResponse>('/injuries', queryParams);
     }
 
     /**
