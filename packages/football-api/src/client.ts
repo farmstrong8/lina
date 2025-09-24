@@ -1,4 +1,6 @@
 import { FOOTBALL_API, HTTP_STATUS } from '@lina/types';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import type {
     GamesParams,
     GamesResponse,
@@ -9,6 +11,9 @@ import type {
     StatisticsParams,
     StatisticsResponse,
 } from './types';
+
+// Configure dayjs to use UTC
+dayjs.extend(utc);
 
 /**
  * Singleton client for API-American-Football
@@ -40,7 +45,7 @@ export class FootballApiClient {
      * Rate limiting: ensure we don't exceed API limits
      */
     private async enforceRateLimit(): Promise<void> {
-        const now = Date.now();
+        const now = dayjs.utc().valueOf();
         const timeSinceLastRequest = now - this.lastRequestTime;
         const minInterval = 60000 / FOOTBALL_API.RATE_LIMITS.REQUESTS_PER_MINUTE;
 
@@ -49,7 +54,7 @@ export class FootballApiClient {
             await new Promise(resolve => setTimeout(resolve, waitTime));
         }
 
-        this.lastRequestTime = Date.now();
+        this.lastRequestTime = dayjs.utc().valueOf();
         this.requestCount++;
     }
 

@@ -15,6 +15,11 @@ import {
     teams,
 } from '@lina/database';
 import { FootballApiClient } from '@lina/football-api';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+// Configure dayjs to use UTC
+dayjs.extend(utc);
 
 /**
  * Football Aggregator Task
@@ -70,9 +75,9 @@ async function getGamesWithOdds(db: DatabaseConnection) {
 
     // Get games that exist in our database (created by odds aggregator)
     // Focus on upcoming/recent games that need analysis
-    const currentTime = Date.now();
-    const sevenDaysAgo = currentTime - 7 * 24 * 60 * 60 * 1000;
-    const sevenDaysFromNow = currentTime + 7 * 24 * 60 * 60 * 1000;
+    const now = dayjs.utc();
+    const sevenDaysAgo = now.subtract(7, 'day').valueOf();
+    const sevenDaysFromNow = now.add(7, 'day').valueOf();
 
     return db
         .select()
@@ -126,7 +131,7 @@ async function enrichGameData(
 async function findTeamByName(footballClient: FootballApiClient, teamName: string) {
     try {
         // Get current season player statistics which includes team info
-        const currentYear = new Date().getFullYear();
+        const currentYear = dayjs.utc().year();
         const statisticsResponse = await footballClient.getPlayerStatistics({
             league: '1', // NFL
             season: currentYear.toString(),
@@ -162,7 +167,7 @@ async function fetchAndStoreInjuries(
     teamId: string
 ) {
     try {
-        const currentYear = new Date().getFullYear();
+        const currentYear = dayjs.utc().year();
         const injuriesResponse = await footballClient.getInjuries({
             league: '1', // NFL
             season: currentYear.toString(),
@@ -178,8 +183,8 @@ async function fetchAndStoreInjuries(
                 bodyPart: null,
                 description: injury.status.detail,
                 gameId: game.id,
-                reportedAt: new Date(injury.date).getTime(),
-                updatedAt: Date.now(),
+                reportedAt: dayjs.utc(injury.date).valueOf(),
+                updatedAt: dayjs.utc().valueOf(),
             };
 
             // Insert injury report (allow duplicates for historical tracking)
@@ -205,7 +210,7 @@ async function updateGameDetails(
     _awayTeamId: string
 ) {
     try {
-        const currentYear = new Date().getFullYear();
+        const currentYear = dayjs.utc().year();
 
         // Try to find the specific game in the API
         const gamesResponse = await footballClient.getGames({
@@ -216,8 +221,9 @@ async function updateGameDetails(
 
         // Find matching game by teams and approximate date
         const matchingGame = gamesResponse.response.find(apiGame => {
-            const gameDate = new Date(apiGame.date).getTime();
-            const timeDiff = Math.abs(gameDate - game.gameDate);
+            const gameDate = dayjs.utc(apiGame.date);
+            const gameDateValue = gameDate.valueOf();
+            const timeDiff = Math.abs(gameDateValue - game.gameDate);
             const oneDayMs = 24 * 60 * 60 * 1000;
 
             return (
@@ -236,7 +242,7 @@ async function updateGameDetails(
                 awayScore: matchingGame.scores.away || game.awayScore,
                 venue: matchingGame.venue.name || game.venue,
                 surfaceType: matchingGame.venue.surface || game.surfaceType,
-                updatedAt: Date.now(),
+                updatedAt: dayjs.utc().valueOf(),
             };
 
             await db.update(games).set(updateData).where(eq(games.id, game.id));
@@ -270,8 +276,8 @@ async function ensureTeamExists(
             division: null,
             primaryColor: null,
             secondaryColor: null,
-            createdAt: Date.now(),
-            updatedAt: Date.now(),
+            createdAt: dayjs.utc().valueOf(),
+            updatedAt: dayjs.utc().valueOf(),
         };
 
         await db.insert(teams).values(newTeam);

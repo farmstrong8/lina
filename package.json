@@ -25,16 +25,17 @@
         "web:dev": "npm run dev --workspace=@lina/web"
     },
     "dependencies": {
+        "dayjs": "^1.11.18",
+        "dotenv": "^16.4.5",
         "drizzle-kit": "^0.24.0",
-        "tsx": "^4.16.5",
-        "dotenv": "^16.4.5"
+        "tsx": "^4.16.5"
     },
     "devDependencies": {
         "@biomejs/biome": "^1.8.3",
-        "typescript": "^5.5.4",
-        "@tsconfig/node20": "^20.1.4",
         "@tsconfig/next": "^2.0.0",
-        "@tsconfig/strictest": "^2.0.5"
+        "@tsconfig/node20": "^20.1.4",
+        "@tsconfig/strictest": "^2.0.5",
+        "typescript": "^5.5.4"
     },
     "engines": {
         "node": ">=18.0.0",

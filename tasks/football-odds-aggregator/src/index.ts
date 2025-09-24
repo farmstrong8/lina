@@ -18,6 +18,11 @@ import {
     type OddsEvent,
     type Outcome,
 } from '@lina/odds-api';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+// Configure dayjs to use UTC
+dayjs.extend(utc);
 
 /**
  * NFL specific markets for comprehensive betting analysis
@@ -138,8 +143,8 @@ async function transformToBettingLine(
     const bettingLineData: NewBettingLine = {
         gameId: gameInDb.id,
         bookmaker: 'fanduel',
-        lastUpdated: new Date(fanDuelBookmaker.last_update).getTime(),
-        createdAt: Date.now(),
+        lastUpdated: dayjs.utc(fanDuelBookmaker.last_update).valueOf(),
+        createdAt: dayjs.utc().valueOf(),
     };
 
     // Extract market data
@@ -248,11 +253,9 @@ async function saveBettingLine(db: DatabaseConnection, bettingLineData: NewBetti
  * Since IDs differ between APIs, we match on team names
  */
 async function findOrCreateGame(db: DatabaseConnection, gameOdds: OddsEvent): Promise<Game | null> {
-    const commenceDate = new Date(gameOdds.commence_time);
-    const dayStart = new Date(commenceDate);
-    dayStart.setHours(0, 0, 0, 0);
-    const dayEnd = new Date(commenceDate);
-    dayEnd.setHours(23, 59, 59, 999);
+    const commenceDate = dayjs.utc(gameOdds.commence_time);
+    const dayStart = commenceDate.startOf('day').valueOf();
+    const dayEnd = commenceDate.endOf('day').valueOf();
 
     const existingGames = await db
         .select()
@@ -263,8 +266,8 @@ async function findOrCreateGame(db: DatabaseConnection, gameOdds: OddsEvent): Pr
     const matchingGame = existingGames.find(
         (game: Game) =>
             game.awayTeam === gameOdds.away_team &&
-            game.gameDate >= dayStart.getTime() &&
-            game.gameDate <= dayEnd.getTime()
+            game.gameDate >= dayStart &&
+            game.gameDate <= dayEnd
     );
 
     if (matchingGame) {
@@ -275,11 +278,11 @@ async function findOrCreateGame(db: DatabaseConnection, gameOdds: OddsEvent): Pr
     const newGame = {
         homeTeam: gameOdds.home_team,
         awayTeam: gameOdds.away_team,
-        gameDate: commenceDate.getTime(),
-        season: commenceDate.getFullYear(),
+        gameDate: commenceDate.valueOf(),
+        season: commenceDate.year(),
         status: 'NS',
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
+        createdAt: dayjs.utc().valueOf(),
+        updatedAt: dayjs.utc().valueOf(),
     };
 
     const [insertedGame] = await db.insert(games).values(newGame).returning();
