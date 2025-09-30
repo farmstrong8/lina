@@ -24,7 +24,7 @@ LINA (Line Analysis Assistant) is designed as a modular monorepo application tha
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   External APIs │    │   LINA System   │    │  Presentation   │
 │                 │    │                 │    │                 │
-│ • Sports APIs   │───▶│ • Aggregators   │───▶│ • React Web App │
+│ • Sports APIs   │───>│ • Aggregators   │───>│ • React Web App │
 │ • Odds APIs     │    │ • SQLite DB     │    │ • API Server    │
 │ • Injury APIs   │    │ • AI Engine     │    │ • CLI Tools     │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
@@ -44,26 +44,20 @@ LINA (Line Analysis Assistant) is designed as a modular monorepo application tha
 ```
 lina/
 ├── packages/
-│   ├── types/            # TypeScript type definitions
-│   ├── constants/        # Application constants and enums
+│   ├── types/           # TypeScript type definitions
+│   ├── constants/       # Application constants and enums
 │   ├── config/          # Configuration management system
-│   ├── database/         # Database schemas, ORM setup, and data mappers
-│   ├── aggregators/      # Data collection services
-│   ├── ai-engine/        # AI analysis and recommendation engine
-│   ├── validation/       # Data validation schemas and functions
+│   ├── database/        # Database schemas, ORM setup, and data mappers
+│   ├── tasks/           # Data collection services
+│   ├── validation/      # Data validation schemas and functions
 │   └── cli/             # Command-line tools for tasks
 ├── apps/
-│   ├── api-server/       # Backend API server
-│   └── web/             # React web application
-├── db/                  # Physical database storage
-│   ├── lina.db          # SQLite database file
-│   ├── migrations/      # SQL migration scripts
-│   └── backups/         # Database backups
+│   └── dashboard/       # React web application
 ├── tools/
 │   ├── biome.json       # BiomeJS configuration
 │   └── tsconfig.json    # Root TypeScript configuration
 ├── .env.example         # Example environment variables
-└── package.json        # Root package.json with workspaces
+└── package.json         # Root package.json with workspaces
 ```
 
 ## 🚀 Quick Start
