@@ -5,29 +5,25 @@
     "private": true,
     "workspaces": ["packages/*", "apps/*"],
     "scripts": {
-        "dev": "npm run dev --workspaces",
         "lint": "biome check .",
         "lint:fix": "biome check --write .",
         "format": "biome format --write .",
         "typecheck": "tsc",
-        "clean": "rm -rf node_modules packages/*/node_modules apps/*/node_modules packages/*/dist apps/*/dist",
+        "clean:node-modules": "./scripts/clean-node-modules.sh",
         "db:generate": "drizzle-kit generate",
-        "db:migrate": "npx tsx db/migrate.ts",
         "db:studio": "drizzle-kit studio",
         "db:push": "drizzle-kit push",
         "db:pull": "drizzle-kit pull",
         "db:check": "drizzle-kit check",
         "db:up": "drizzle-kit up",
         "aggregator:football-odds": "tsx tasks/football-odds-aggregator/src/index.ts",
-        "aggregator:football": "tsx tasks/football-aggregator/src/index.ts",
-        "api:start": "npm run start --workspace=@lina/api-server",
-        "web:start": "npm run start --workspace=@lina/web",
-        "web:dev": "npm run dev --workspace=@lina/web"
+        "aggregator:football": "tsx tasks/football-aggregator/src/index.ts"
     },
     "dependencies": {
         "dayjs": "^1.11.18",
         "dotenv": "^16.4.5",
-        "drizzle-kit": "^0.24.0",
+        "drizzle-kit": "^0.31.5",
+		"drizzle-orm": "^0.44.5",
         "tsx": "^4.16.5"
     },
     "devDependencies": {

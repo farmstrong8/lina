@@ -12,12 +12,10 @@
     "dependencies": {
         "@lina/types": "*",
         "@lina/config": "*",
-        "drizzle-orm": "^0.33.0",
         "better-sqlite3": "^11.1.2"
     },
     "devDependencies": {
         "typescript": "^5.5.4",
-        "@types/better-sqlite3": "^7.6.11",
-        "drizzle-kit": "^0.24.0"
+        "@types/better-sqlite3": "^7.6.11"
     }
 }

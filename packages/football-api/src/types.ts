@@ -2,8 +2,6 @@
  * TypeScript interfaces for American Football API responses
  * Based on API-American-Football specifications
  */
-
-// Common types
 export interface Team {
     id: number;
     name: string;
