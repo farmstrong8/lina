@@ -5,11 +5,9 @@
         "incremental": false,
         "baseUrl": ".",
         "paths": {
-            "@lina/types": ["./packages/types/src"],
             "@lina/database": ["./packages/database/src"],
             "@lina/odds-api": ["./packages/odds-api/src"],
-            "@lina/football-api": ["./packages/football-api/src"],
-            "@lina/ai-engine": ["./packages/ai-engine/src"]
+            "@lina/football-api": ["./packages/football-api/src"]
         }
     },
     "include": ["packages", "db", "tasks"]

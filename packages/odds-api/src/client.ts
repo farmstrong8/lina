@@ -1,14 +1,14 @@
-import { ODDS_API } from "@lina/types";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import { ODDS_API } from './constants';
 import type {
-    EventsParams,
-    EventsResponse,
     EventOddsParams,
     EventOddsResponse,
+    EventsParams,
+    EventsResponse,
     SportsParams,
     SportsResponse,
-} from "./types";
+} from './types';
 
 // Configure dayjs to use UTC
 dayjs.extend(utc);
@@ -38,7 +38,7 @@ export class OddsApiClient {
 
         if (timeSinceLastRequest < minInterval) {
             const waitTime = minInterval - timeSinceLastRequest;
-            await new Promise((resolve) => setTimeout(resolve, waitTime));
+            await new Promise(resolve => setTimeout(resolve, waitTime));
         }
 
         this.lastRequestTime = dayjs.utc().valueOf();
@@ -65,17 +65,15 @@ export class OddsApiClient {
         }
 
         const response = await fetch(url.toString(), {
-            method: "GET",
+            method: 'GET',
             headers: {
-                Accept: "application/json",
+                Accept: 'application/json',
             },
         });
 
         if (!response.ok) {
             console.log(url.toString());
-            throw new Error(
-                `API request failed: ${response.status} ${response.statusText}`
-            );
+            throw new Error(`API request failed: ${response.status} ${response.statusText}`);
         }
 
         return response.json() as T;
@@ -84,24 +82,20 @@ export class OddsApiClient {
     /**
      * Get available sports (does not count against quota)
      */
-    public async getSports(
-        params: Omit<SportsParams, "apiKey"> = {}
-    ): Promise<SportsResponse> {
+    public async getSports(params: Omit<SportsParams, 'apiKey'> = {}): Promise<SportsResponse> {
         const queryParams: Record<string, string> = {};
 
         if (params.all !== undefined) {
             queryParams.all = params.all.toString();
         }
 
-        return this.makeRequest<SportsResponse>("/v4/sports", queryParams);
+        return this.makeRequest<SportsResponse>('/v4/sports', queryParams);
     }
 
     /**
      * Get events for a specific sport (does not count against quota)
      */
-    public async getEvents(
-        params: Omit<EventsParams, "apiKey">
-    ): Promise<EventsResponse> {
+    public async getEvents(params: Omit<EventsParams, 'apiKey'>): Promise<EventsResponse> {
         const { sport, ...restParams } = params;
         const queryParams: Record<string, string> = {};
 
@@ -118,18 +112,13 @@ export class OddsApiClient {
             queryParams.commenceTimeTo = restParams.commenceTimeTo;
         }
 
-        return this.makeRequest<EventsResponse>(
-            `/v4/sports/${sport}/events`,
-            queryParams
-        );
+        return this.makeRequest<EventsResponse>(`/v4/sports/${sport}/events`, queryParams);
     }
 
     /**
      * Get odds for a specific sport (counts against quota)
      */
-    public async getEventOdds(
-        params: Omit<EventOddsParams, "apiKey">
-    ): Promise<EventOddsResponse> {
+    public async getEventOdds(params: Omit<EventOddsParams, 'apiKey'>): Promise<EventOddsResponse> {
         const sport = params.sport;
         const eventId = params.eventId;
         const queryParams: Record<string, string> = {};

@@ -1,17 +1,14 @@
-import { Logger } from "@lina/logger";
-import type { Market, OddsApiClient } from "@lina/odds-api";
-import type { DatabaseClient } from "@lina/database";
-import { events, odds, type Event, type NewEvent } from "@lina/database";
-import { NFL_MARKETS, NFL_SPORT_KEY, FANDUEL_BOOKMAKER_KEY } from "./constants";
-import { and, gte, lte } from "drizzle-orm";
-import dayjs from "dayjs";
-import type {
-    Event as ApiEvent,
-    EventOdds as ApiEventOdds,
-} from "@lina/odds-api";
+import type { DatabaseClient } from '@lina/database';
+import { events, type Event, type NewEvent, odds } from '@lina/database';
+import { Logger } from '@lina/logger';
+import type { Market, OddsApiClient } from '@lina/odds-api';
+import type { Event as ApiEvent, EventOdds as ApiEventOdds } from '@lina/odds-api';
+import dayjs from 'dayjs';
+import { and, gte, lte } from 'drizzle-orm';
+import { FANDUEL_BOOKMAKER_KEY, NFL_MARKETS, NFL_SPORT_KEY } from './constants';
 
 export class OddsAggregator {
-    private db: ReturnType<DatabaseClient["getDb"]>;
+    private db: ReturnType<DatabaseClient['getDb']>;
 
     constructor(
         private logger: Logger,
@@ -25,7 +22,7 @@ export class OddsAggregator {
      * Main aggregation workflow
      */
     async aggregate() {
-        this.logger.info("Starting football odds aggregation...");
+        this.logger.info('Starting football odds aggregation...');
 
         try {
             const weekRange = this.getWeekRange();
@@ -42,13 +39,11 @@ export class OddsAggregator {
      * Get start and end timestamps for current week
      */
     private getWeekRange(): { startOfWeek: number; endOfWeek: number } {
-        const startOfWeek = dayjs.utc().startOf("week");
-        const endOfWeek = dayjs.utc().endOf("week");
+        const startOfWeek = dayjs.utc().startOf('week');
+        const endOfWeek = dayjs.utc().endOf('week');
 
         this.logger.info(
-            `Week range: ${startOfWeek.format(
-                "YYYY-MM-DD"
-            )} to ${endOfWeek.format("YYYY-MM-DD")}`
+            `Week range: ${startOfWeek.format('YYYY-MM-DD')} to ${endOfWeek.format('YYYY-MM-DD')}`
         );
 
         return { startOfWeek: startOfWeek.unix(), endOfWeek: endOfWeek.unix() };
@@ -64,12 +59,10 @@ export class OddsAggregator {
         let existingEvents = await this.queryEventsFromDb(weekRange);
 
         if (existingEvents.length === 0) {
-            this.logger.info("No events in DB, fetching from API...");
+            this.logger.info('No events in DB, fetching from API...');
             existingEvents = await this.fetchAndStoreEvents();
         } else {
-            this.logger.info(
-                `Found ${existingEvents.length} events in database`
-            );
+            this.logger.info(`Found ${existingEvents.length} events in database`);
         }
 
         return existingEvents;
@@ -130,9 +123,7 @@ export class OddsAggregator {
             insertedEvents.push(inserted);
         }
 
-        this.logger.info(
-            `Upserted ${insertedEvents.length} events in database`
-        );
+        this.logger.info(`Upserted ${insertedEvents.length} events in database`);
         return insertedEvents;
     }
 
@@ -156,9 +147,7 @@ export class OddsAggregator {
      * Process and store odds for a single event
      */
     private async processEventOdds(event: Event) {
-        this.logger.info(
-            `Processing odds for ${event.homeTeam} vs ${event.awayTeam}`
-        );
+        this.logger.info(`Processing odds for ${event.homeTeam} vs ${event.awayTeam}`);
 
         const oddsData = await this.fetchEventOdds(event);
 
@@ -181,9 +170,9 @@ export class OddsAggregator {
         return this.oddsApiClient.getEventOdds({
             sport: NFL_SPORT_KEY,
             eventId: event.eventId.toString(),
-            markets: NFL_MARKETS.join(","),
+            markets: NFL_MARKETS.join(','),
             bookmakers: FANDUEL_BOOKMAKER_KEY,
-            regions: "us",
+            regions: 'us',
         });
     }
 
@@ -216,8 +205,6 @@ export class OddsAggregator {
                 });
         }
 
-        this.logger.info(
-            `Stored ${market.outcomes.length} odds for ${market.key}`
-        );
+        this.logger.info(`Stored ${market.outcomes.length} odds for ${market.key}`);
     }
 }

@@ -1,5 +1,5 @@
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
-import { games } from "./games.schema"
+import { games } from './games.schema';
 
 /**
  * Player Injuries Schema - Track injury status affecting game outcomes
@@ -16,7 +16,6 @@ export const playerInjuries = sqliteTable('player_injuries', {
     reportedAt: integer('reported_at').notNull(),
     updatedAt: integer('updated_at').notNull(),
 });
-
 
 export type PlayerInjury = typeof playerInjuries.$inferSelect;
 export type NewPlayerInjury = typeof playerInjuries.$inferInsert;

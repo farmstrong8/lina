@@ -1,10 +1,10 @@
-import Database from "better-sqlite3";
-import { drizzle } from "drizzle-orm/better-sqlite3";
-import * as schema from "./schemas";
-import path from "node:path";
+import path from 'node:path';
+import Database from 'better-sqlite3';
+import { drizzle } from 'drizzle-orm/better-sqlite3';
+import * as schema from './schemas';
 
 // In CommonJS, __dirname is available directly
-const DEFAULT_DB_PATH = path.join(__dirname, "lina.db");
+const DEFAULT_DB_PATH = path.join(__dirname, 'lina.db');
 
 /**
  * Database connection singleton

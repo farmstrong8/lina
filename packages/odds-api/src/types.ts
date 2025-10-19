@@ -68,7 +68,7 @@ export interface SportsParams {
 export interface EventsParams {
     sport: string;
     apiKey: string;
-    dateFormat?: "unix" | "iso";
+    dateFormat?: 'unix' | 'iso';
     eventIds?: string;
     commenceTimeFrom?: string;
     commenceTimeTo?: string;
@@ -80,9 +80,9 @@ export interface EventOddsParams {
     apiKey: string;
     regions?: RegionType;
     markets?: string;
-    dateFormat?: "unix" | "iso";
-    oddsFormat?: "decimal" | "american";
+    dateFormat?: 'unix' | 'iso';
+    oddsFormat?: 'decimal' | 'american';
     bookmakers?: string;
 }
 // Region types
-export type RegionType = "us" | "us2" | "uk" | "au" | "eu";
+export type RegionType = 'us' | 'us2' | 'uk' | 'au' | 'eu';

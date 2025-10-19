@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 const configSchema = z.object({
     ODDS_API_KEY: z.string(),

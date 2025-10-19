@@ -3,10 +3,7 @@
     "version": "1.0.0",
     "description": "LINA (Line Analysis Assistant) - Sports betting analysis tool with AI recommendations",
     "private": true,
-    "workspaces": [
-        "packages/*",
-        "apps/*"
-    ],
+    "workspaces": ["packages/*", "apps/*"],
     "scripts": {
         "lint": "biome check .",
         "lint:fix": "biome check --write .",

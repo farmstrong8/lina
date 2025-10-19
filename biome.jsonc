@@ -62,14 +62,15 @@
             "*.json"
         ],
         "ignore": [
+            ".cursor",
+            ".serena",
             "node_modules",
             "dist",
             "build",
             ".next",
             "coverage",
-            "db/*.db",
-            "db/backups/*",
-            "db/migrations/*",
+            "*.db",
+            "drizzle",
             "*.tsbuildinfo"
         ]
     }

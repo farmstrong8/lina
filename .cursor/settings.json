@@ -15,8 +15,8 @@
     // Optional: also run Biome's code actions on save
     // Use true to always run, or "explicit" if you only want them when explicitly enabled.
     "editor.codeActionsOnSave": {
-        "source.organizeImports.biome": "explicit",
-        "source.fixAll.biome": "explicit"
+        "source.organizeImports.biome": "always", // Change from "explicit"
+        "source.fixAll.biome": "always" // Change from "explicit"
     },
 
     // Enable unsafe fixes from Biome
