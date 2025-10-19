@@ -1,0 +1,10 @@
+{
+    "name": "@lina/logger",
+    "version": "1.0.0",
+    "description": "Logger for LINA",
+    "scripts": {},
+    "dependencies": {
+        "pino": "^10.1.0",
+        "pino-pretty": "^13.1.2"
+    }
+}

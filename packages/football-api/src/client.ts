@@ -1,6 +1,6 @@
-import { FOOTBALL_API, HTTP_STATUS } from '@lina/types';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
+import { FOOTBALL_API, HTTP_STATUS } from "@lina/types";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import type {
     GamesParams,
     GamesResponse,
@@ -10,7 +10,7 @@ import type {
     PlayersResponse,
     StatisticsParams,
     StatisticsResponse,
-} from './types';
+} from "./types";
 
 // Configure dayjs to use UTC
 dayjs.extend(utc);
@@ -34,7 +34,7 @@ export class FootballApiClient {
     public static getInstance(apiKey?: string): FootballApiClient {
         if (!FootballApiClient.instance) {
             if (!apiKey) {
-                throw new Error('API key required for first initialization');
+                throw new Error("API key required for first initialization");
             }
             FootballApiClient.instance = new FootballApiClient(apiKey);
         }
@@ -47,11 +47,12 @@ export class FootballApiClient {
     private async enforceRateLimit(): Promise<void> {
         const now = dayjs.utc().valueOf();
         const timeSinceLastRequest = now - this.lastRequestTime;
-        const minInterval = 60000 / FOOTBALL_API.RATE_LIMITS.REQUESTS_PER_MINUTE;
+        const minInterval =
+            60000 / FOOTBALL_API.RATE_LIMITS.REQUESTS_PER_MINUTE;
 
         if (timeSinceLastRequest < minInterval) {
             const waitTime = minInterval - timeSinceLastRequest;
-            await new Promise(resolve => setTimeout(resolve, waitTime));
+            await new Promise((resolve) => setTimeout(resolve, waitTime));
         }
 
         this.lastRequestTime = dayjs.utc().valueOf();
@@ -69,19 +70,23 @@ export class FootballApiClient {
 
         const url = new URL(endpoint, this.baseUrl);
         for (const [key, value] of Object.entries(params)) {
-            if (value) url.searchParams.append(key, value);
+            if (value) {
+                url.searchParams.append(key, value);
+            }
         }
 
         const response = await fetch(url.toString(), {
-            method: 'GET',
+            method: "GET",
             headers: {
-                'X-RapidAPI-Key': this.apiKey,
-                'X-RapidAPI-Host': FOOTBALL_API.HEADERS.HOST,
+                "X-RapidAPI-Key": this.apiKey,
+                "X-RapidAPI-Host": FOOTBALL_API.HEADERS.HOST,
             },
         });
 
         if (!response.ok) {
-            throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+            throw new Error(
+                `API request failed: ${response.status} ${response.statusText}`
+            );
         }
 
         return response.json() as T;
@@ -100,13 +105,15 @@ export class FootballApiClient {
         if (params.team) queryParams.team = params.team;
         if (params.timezone) queryParams.timezone = params.timezone;
 
-        return this.makeRequest<GamesResponse>('/games', queryParams);
+        return this.makeRequest<GamesResponse>("/games", queryParams);
     }
 
     /**
      * Get players for a specific team/season
      */
-    public async getPlayers(params: PlayersParams = {}): Promise<PlayersResponse> {
+    public async getPlayers(
+        params: PlayersParams = {}
+    ): Promise<PlayersResponse> {
         const queryParams: Record<string, string> = {};
 
         if (params.team) queryParams.team = params.team;
@@ -114,13 +121,15 @@ export class FootballApiClient {
         if (params.search) queryParams.search = params.search;
         if (params.page) queryParams.page = params.page;
 
-        return this.makeRequest<PlayersResponse>('/players', queryParams);
+        return this.makeRequest<PlayersResponse>("/players", queryParams);
     }
 
     /**
      * Get player statistics
      */
-    public async getPlayerStatistics(params: StatisticsParams = {}): Promise<StatisticsResponse> {
+    public async getPlayerStatistics(
+        params: StatisticsParams = {}
+    ): Promise<StatisticsResponse> {
         const queryParams: Record<string, string> = {};
 
         if (params.league) queryParams.league = params.league;
@@ -129,13 +138,18 @@ export class FootballApiClient {
         if (params.player) queryParams.player = params.player;
         if (params.game) queryParams.game = params.game;
 
-        return this.makeRequest<StatisticsResponse>('/players/statistics', queryParams);
+        return this.makeRequest<StatisticsResponse>(
+            "/players/statistics",
+            queryParams
+        );
     }
 
     /**
      * Get player injury reports
      */
-    public async getInjuries(params: InjuriesParams = {}): Promise<InjuriesResponse> {
+    public async getInjuries(
+        params: InjuriesParams = {}
+    ): Promise<InjuriesResponse> {
         const queryParams: Record<string, string> = {};
 
         if (params.league) queryParams.league = params.league;
@@ -145,7 +159,7 @@ export class FootballApiClient {
         if (params.date) queryParams.date = params.date;
         if (params.timezone) queryParams.timezone = params.timezone;
 
-        return this.makeRequest<InjuriesResponse>('/injuries', queryParams);
+        return this.makeRequest<InjuriesResponse>("/injuries", queryParams);
     }
 
     /**

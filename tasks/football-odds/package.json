@@ -1,5 +1,5 @@
 {
-    "name": "@lina/odds-aggregator",
+    "name": "@lina/football-odds",
     "version": "1.0.0",
     "description": "Task-based aggregator for FanDuel odds from OddsApi",
     "main": "dist/index.js",
@@ -13,7 +13,9 @@
         "@lina/types": "*",
         "@lina/database": "*",
         "@lina/odds-api": "*",
-        "dotenv": "^16.4.5"
+        "@lina/logger": "*",
+        "dotenv": "^16.4.5",
+        "zod": "^3.24.2"
     },
     "devDependencies": {
         "typescript": "^5.5.4",

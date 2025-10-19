@@ -19,7 +19,7 @@ export interface SportsResponse extends Array<Sport> {}
 export interface Outcome {
     name: string;
     price: number;
-    point?: number; // For spreads
+    point?: number;
 }
 
 export interface Market {
@@ -47,16 +47,17 @@ export interface Event {
 export interface EventsResponse extends Array<Event> {}
 
 // Odds endpoint types
-export interface OddsEvent {
+export interface EventOdds {
     id: string;
     sport_key: string;
+    sport_title: string;
     commence_time: string;
     home_team: string;
     away_team: string;
     bookmakers: Bookmaker[];
 }
 
-export interface OddsResponse extends Array<OddsEvent> {}
+export interface EventOddsResponse extends EventOdds {}
 
 // Request parameter types
 export interface SportsParams {
@@ -67,45 +68,21 @@ export interface SportsParams {
 export interface EventsParams {
     sport: string;
     apiKey: string;
-    dateFormat?: 'unix' | 'iso';
+    dateFormat?: "unix" | "iso";
     eventIds?: string;
     commenceTimeFrom?: string;
     commenceTimeTo?: string;
 }
 
-export interface OddsParams {
+export interface EventOddsParams {
     sport: string;
+    eventId: string;
     apiKey: string;
-    regions: string;
+    regions?: RegionType;
     markets?: string;
-    dateFormat?: 'unix' | 'iso';
-    oddsFormat?: 'decimal' | 'american';
-    eventIds?: string;
+    dateFormat?: "unix" | "iso";
+    oddsFormat?: "decimal" | "american";
     bookmakers?: string;
-    commenceTimeFrom?: string;
-    commenceTimeTo?: string;
-    includeLinks?: boolean;
-    includeSids?: boolean;
-    includeBetLimits?: boolean;
 }
-
-// Market types for type safety
-export type MarketType = 'h2h' | 'spreads' | 'totals' | 'outrights' | 'h2h_lay' | 'outrights_lay';
-
 // Region types
-export type RegionType = 'us' | 'us2' | 'uk' | 'au' | 'eu';
-
-// Popular sport keys for NFL focus
-export const NFL_SPORT_KEY = 'americanfootball_nfl';
-export const UPCOMING_SPORT_KEY = 'upcoming';
-
-// Common bookmaker keys for FanDuel focus
-export const FANDUEL_BOOKMAKER_KEY = 'fanduel';
-
-// Default parameter values (sport-agnostic)
-export const DEFAULT_ODDS_PARAMS = {
-    regions: 'us' as RegionType,
-    markets: 'h2h,spreads,totals',
-    dateFormat: 'iso' as const,
-    oddsFormat: 'american' as const,
-};
+export type RegionType = "us" | "us2" | "uk" | "au" | "eu";

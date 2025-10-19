@@ -1,13 +1,11 @@
-import 'dotenv/config';
-import { defineConfig } from 'drizzle-kit';
-
-console.log(process.env.DATABASE_PATH)
+import "dotenv/config";
+import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({
-  out: './packages/database/drizzle',
-  schema: './packages/database/src/schemas/index.ts',
-  dialect: 'sqlite',
-  dbCredentials: {
-    url: process.env.DATABASE_PATH!,
-  },
+    out: "./packages/database/drizzle",
+    schema: "./packages/database/src/schemas/index.ts",
+    dialect: "sqlite",
+    dbCredentials: {
+        url: "./packages/database/src/lina.db",
+    },
 });

@@ -13,6 +13,7 @@
         "@lina/types": "*",
         "@lina/database": "*",
         "@lina/football-api": "*",
+        "@lina/logger": "*",
         "dotenv": "^16.4.5"
     },
     "devDependencies": {

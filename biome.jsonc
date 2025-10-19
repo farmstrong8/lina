@@ -13,8 +13,9 @@
             },
             "style": {
                 "noNonNullAssertion": "warn",
-                "useImportType": "error",
-                "useNodejsImportProtocol": "error"
+                "useNodejsImportProtocol": "error",
+                "useImportType": "off",
+                "useBlockStatements": "error"
             },
             "suspicious": {
                 "noExplicitAny": "warn",

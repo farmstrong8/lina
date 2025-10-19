@@ -1,31 +1,36 @@
-import Database from 'better-sqlite3';
-import { drizzle } from 'drizzle-orm/better-sqlite3';
-import * as schema from './schemas';
+import Database from "better-sqlite3";
+import { drizzle } from "drizzle-orm/better-sqlite3";
+import * as schema from "./schemas";
+import path from "node:path";
+
+// In CommonJS, __dirname is available directly
+const DEFAULT_DB_PATH = path.join(__dirname, "lina.db");
 
 /**
  * Database connection singleton
  */
-class DatabaseConnection {
-    private static instance: DatabaseConnection;
+export class DatabaseClient {
+    private static instance: DatabaseClient | null = null;
     private db: ReturnType<typeof drizzle>;
     private sqlite: Database.Database;
 
-    private constructor() {
-        this.sqlite = new Database(DATABASE_CONFIG.DEFAULT_PATH);
-
-        // Enable WAL mode for better performance
-        if (DATABASE_CONFIG.WAL_MODE) {
-            this.sqlite.pragma('journal_mode = WAL');
-        }
-
+    private constructor(filename: string) {
+        this.sqlite = new Database(filename);
         this.db = drizzle(this.sqlite, { schema });
     }
 
-    public static getInstance(): DatabaseConnection {
-        if (!DatabaseConnection.instance) {
-            DatabaseConnection.instance = new DatabaseConnection();
+    public static getInstance(filename = DEFAULT_DB_PATH): DatabaseClient {
+        if (!DatabaseClient.instance) {
+            DatabaseClient.instance = new DatabaseClient(filename);
         }
-        return DatabaseConnection.instance;
+        return DatabaseClient.instance;
+    }
+
+    public static reset() {
+        if (DatabaseClient.instance) {
+            DatabaseClient.instance.close();
+            DatabaseClient.instance = null;
+        }
     }
 
     public getDb() {
@@ -39,12 +44,4 @@ class DatabaseConnection {
     public close() {
         this.sqlite.close();
     }
-}
-
-export function createDatabaseConnection() {
-    return DatabaseConnection.getInstance().getDb();
-}
-
-export function closeDatabaseConnection() {
-    DatabaseConnection.getInstance().close();
 }

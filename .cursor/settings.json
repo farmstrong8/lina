@@ -1,31 +1,34 @@
 {
-  // --- formatting on save ---
-  "editor.formatOnSave": true,
-  "editor.formatOnSaveMode": "file",
-  "editor.defaultFormatter": "biomejs.biome",
+    // --- formatting on save ---
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+    "editor.defaultFormatter": "biomejs.biome",
 
-  // Per-language (helps win formatter conflicts)
-  "[javascript]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[javascriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[typescript]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[typescriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[json]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[jsonc]": { "editor.defaultFormatter": "biomejs.biome" },
+    // Per-language (helps win formatter conflicts)
+    "[javascript]": { "editor.defaultFormatter": "biomejs.biome" },
+    "[javascriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
+    "[typescript]": { "editor.defaultFormatter": "biomejs.biome" },
+    "[typescriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
+    "[json]": { "editor.defaultFormatter": "biomejs.biome" },
+    "[jsonc]": { "editor.defaultFormatter": "biomejs.biome" },
 
-  // Optional: also run Biome's code actions on save
-  // Use true to always run, or "explicit" if you only want them when explicitly enabled.
-  "editor.codeActionsOnSave": {
-    "source.organizeImports.biome": true,
-    "source.fixAll.biome": true
-  },
+    // Optional: also run Biome's code actions on save
+    // Use true to always run, or "explicit" if you only want them when explicitly enabled.
+    "editor.codeActionsOnSave": {
+        "source.organizeImports.biome": "explicit",
+        "source.fixAll.biome": "explicit"
+    },
 
-  // --- match your style from biome.jsonc ---
-  "editor.insertSpaces": true,
-  "editor.tabSize": 4,
-  "editor.detectIndentation": false,
-  "files.eol": "\n",
+    // Enable unsafe fixes from Biome
+    "biome.lsp.unsafe_fixes": "always",
 
-  // Avoid conflicts (disable other formatters if installed)
-  "prettier.enable": false,
-  "eslint.format.enable": false
+    // --- match your style from biome.jsonc ---
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    "editor.detectIndentation": false,
+    "files.eol": "\n",
+
+    // Avoid conflicts (disable other formatters if installed)
+    "prettier.enable": false,
+    "eslint.format.enable": false
 }
